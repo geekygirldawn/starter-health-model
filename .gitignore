@@ -1,3 +1,10 @@
+# Project files with confidential data (keys, pwds)
+config.json
+gh_key
+
+# Output files
+output/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
