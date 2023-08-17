@@ -26,7 +26,7 @@ def output_path(repo_name, org_name):
     last_month = get_last_month()
     current_year_month = str(last_month.year) + '-' + '{:02d}'.format(last_month.month)
 
-    current_dir = dirname(__file__)
+    current_dir = dirname(dirname(__file__)) # the double dirname is equivalent to ../
     rel_path = './output/' + current_year_month + '/' + org_name + '/' + repo_name 
     path = join(current_dir, rel_path)
     Path(path).mkdir(parents=True, exist_ok=True)
