@@ -58,7 +58,7 @@ Output
 import argparse
 from utils.augur_connect import augur_db_connect
 from utils.repo_info import get_repo_info
-from common_functions import get_dates
+from utils.date_calcs import get_dates
 from common_functions import fork_archive, repo_api_call
 from common_functions import sustain_prs_by_repo_graph, response_time_graph, contributor_risk_graph, activity_release_graph
 
@@ -69,12 +69,14 @@ parser.add_argument("-o", "--org", required=True, dest = "org_name", help="The n
 parser.add_argument("-r", "--repo", required=True, dest = "repo_name", help="The name of a GitHub repository in that org where your PRs can be found (required)")
 parser.add_argument("-y", "--years", required=False, dest = "years", type=int, default=1, help="The number of years of data to collect (default to 1)")
 parser.add_argument("-c", "--configfile", required=True, dest = "augur_config", help="The full file path to an Augur config.json file (required)")
+parser.add_argument("-t", "--token", required=True, dest = "api_key", help="The file where your GitHub personal access token can be found (required)")
 
 args = parser.parse_args()
 org_name = args.org_name
 repo_name = args.repo_name
 years = args.years
 augur_config = args.augur_config
+api_key = args.api_key
 
 # Get the dates for the analysis using the years argument if provided
 days = 365 * years

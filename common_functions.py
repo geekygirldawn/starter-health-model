@@ -13,94 +13,6 @@ in '_data' while graphing functions have names ending in '_graph'
 
 """
 
-def get_last_month():
-    """Gets the datetime for the month with the last complete month of data
-    
-    Returns
-    -------
-    last_month : datetime object
-    """
-    import datetime 
-
-    current = datetime.date.today()
-
-    first_current = current.replace(day=1)
-    last_month = first_current - datetime.timedelta(days=1)
-
-    return(last_month)
-
-def get_dates(days):
-    """ Gets the start and end date for the analysis based on the number
-    of years to be analyzed (converted to days)"
-    
-    Parameters
-    ----------
-    days : int
-
-    Returns
-    -------
-    start_date : str
-    end_date : str
-    """
-    import datetime 
-
-    last_month = get_last_month()
-    end_date = "'" + str(last_month) + "'"
-
-    start_month = last_month - datetime.timedelta(days=days)
-    start = (start_month.replace(day=1) + datetime.timedelta(days=32)).replace(day=1) # convert to 1st day of following month
-    start_date = "'" + str(start) + "'"
-
-    return start_date, end_date
-
-def convert_to_dt(start_date, end_date):
-    """ Converts start and end dates to datetime objects
-
-    Parameters
-    ----------
-    start_date : str
-    end_date : str
-
-    Returns
-    -------
-    start_dt : datetime
-    end_dt : datetime
-    
-    """
-    from datetime import datetime, timezone
-
-    # inputs will be date strings, output tz aware datetime
-
-    end_dt = datetime.strptime(end_date, "'%Y-%m-%d'").replace(tzinfo=timezone.utc)
-
-    start_dt = datetime.strptime(start_date, "'%Y-%m-%d'").replace(tzinfo=timezone.utc)
-
-    return start_dt, end_dt
-
-def convert_dates(start_date, end_date):
-    """ Converts start and end dates to datetime objects.
-
-    This is different from the other function that does this, but
-    I don't remember why :)
-
-    Parameters
-    ----------
-    start_date : str
-    end_date : str
-
-    Returns
-    -------
-    start_dt : datetime
-    end_dt : datetime
-    
-    """
-    import datetime
-
-    start_dt = datetime.datetime.strptime(start_date[1:11], '%Y-%m-%d')
-    end_dt = datetime.datetime.strptime(end_date[1:11], '%Y-%m-%d')
-
-    return start_dt, end_dt 
-
 def read_key(file_name):
     """Retrieves a GitHub API key from a file.
     
@@ -124,54 +36,6 @@ def read_key(file_name):
     with open(file_path, 'r') as kf:
         key = kf.readline().rstrip() # remove newline & trailing whitespace
     return key
-
-def output_path(repo_name, org_name):
-    """ Creates the path string where files will be located
-
-    Parameters
-    ----------
-    repo_name : str
-    org_name : str
-
-    Returns
-    -------
-    path : str
-
-    """
-    import datetime
-    from os.path import dirname, join
-    from pathlib import Path
-
-    today = datetime.date.today()
-    last_month = get_last_month()
-    current_year_month = str(last_month.year) + '-' + '{:02d}'.format(last_month.month)
-
-    current_dir = dirname(__file__)
-    rel_path = './output/' + current_year_month + '/' + org_name + '/' + repo_name 
-    path = join(current_dir, rel_path)
-    Path(path).mkdir(parents=True, exist_ok=True)
-
-    return path
-
-def output_filename(repo_name, org_name, metric_string): 
-    """ Creates the string containing the filename where a graph will be created
-
-    Parameters
-    ----------
-    repo_name : str
-    org_name : str
-    metric_str : str
-
-    Returns
-    -------
-    filename : str
-    """
-
-    path = output_path(repo_name, org_name)
-
-    filename = path + '/' + repo_name + '_' + metric_string + '.png'
-
-    return filename
 
 def fork_archive(repo_name_orig, org_name, engine):
     """ Check whether a repo is a fork or an archived project.
@@ -294,6 +158,7 @@ def activity_release_data(repo_name, org_name, start_date, end_date, repo_api):
     """
 
     import datetime
+    from utils.date_calcs import convert_dates
 
     try:
         releases_df = get_release_data(repo_api)
@@ -340,6 +205,7 @@ def activity_release_graph(repo_name, org_name, start_date, end_date, repo_api):
     import matplotlib
     import matplotlib.pyplot as plt
     import matplotlib.ticker as ticker
+    from utils.file_operations import output_filename
 
     error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num = activity_release_data(repo_name, org_name, start_date, end_date, repo_api)
 
@@ -656,6 +522,7 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
     import datetime
     from matplotlib.ticker import MaxNLocator
     import warnings
+    from utils.file_operations import output_filename
 
     warnings.simplefilter("ignore") # Ignore fixed formatter warning.
 
@@ -705,6 +572,7 @@ def commit_author_data(repo_id, start_date, end_date, engine):
     authorDF : dataframe
     """
     import pandas as pd
+    from utils.date_calcs import convert_to_dt
 
     start_date, end_date = convert_to_dt(start_date, end_date)
 
@@ -873,6 +741,7 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
     import seaborn as sns
     import matplotlib
     import matplotlib.pyplot as plt
+    from utils.file_operations import output_filename
 
     error_num, error_text, names, percents, commits, title, interpretation, num_people = contributor_risk_data(repo_id, repo_name, org_name, start_date, end_date, engine)
 
@@ -1120,6 +989,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     import matplotlib.pyplot as plt
     from matplotlib.ticker import MaxNLocator
     import warnings
+    from utils.file_operations import output_filename
     
     warnings.simplefilter("ignore") # Ignore fixed formatter warning.
 
