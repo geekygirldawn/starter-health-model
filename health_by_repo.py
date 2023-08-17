@@ -28,13 +28,10 @@ config.json
     }
 Replace the 'x's with values to connect to your Augur database
 
-api_key
-A text file containing one GitHub personal access token
-
 Usage
 ----- 
 
-health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS] -c AUGUR_CONFIG -t API_KEY
+health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS] -c AUGUR_CONFIG 
 
 options:
   -h, --help            show this help message and exit
@@ -46,8 +43,6 @@ options:
                         The number of years of data to collect (default to 1)
   -c AUGUR_CONFIG, --configfile AUGUR_CONFIG
                         The full file path to an Augur config.json file (required)
-  -t API_KEY, --token API_KEY
-                        The file where your GitHub personal access token can be found (required)
 
 Output
 ------
@@ -75,14 +70,12 @@ parser.add_argument("-o", "--org", required=True, dest = "org_name", help="The n
 parser.add_argument("-r", "--repo", required=True, dest = "repo_name", help="The name of a GitHub repository in that org where your PRs can be found (required)")
 parser.add_argument("-y", "--years", required=False, dest = "years", type=int, default=1, help="The number of years of data to collect (default to 1)")
 parser.add_argument("-c", "--configfile", required=True, dest = "augur_config", help="The full file path to an Augur config.json file (required)")
-parser.add_argument("-t", "--token", required=True, dest = "api_key", help="The file where your GitHub personal access token can be found (required)")
 
 args = parser.parse_args()
 org_name = args.org_name
 repo_name = args.repo_name
 years = args.years
 augur_config = args.augur_config
-api_key = args.api_key
 
 # Get the dates for the analysis using the years argument if provided
 days = 365 * years
@@ -99,23 +92,10 @@ repo_id = get_repo_info(engine, org_name, repo_name)
 is_forked, is_archived = fork_archive(repo_name, org_name, engine)
 print('Forked:', str(is_forked), '\nArchived:', str(is_archived))
 
-# Get the GitHub API repository object used to gather release data.
-repo_api = repo_api_call(repo_name, org_name, api_key)
-
-# This section compares the Augur org / repo and renames them for repos that have been redirected
-# using the GH API as the canonical source of data for the org and repo, rather than what's in Augur
-# This fixes the problem of repos being renamed, but not updated in Augur.
-full_name = org_name + '/' + repo_name
-api_name = repo_api.full_name
-
-if full_name.lower() != api_name.lower():
-    org_name = api_name.split("/")[0]
-    repo_name = api_name.split("/")[1]
-
 # This section collects all of the data using the functions for each graph
 # found in common_functions.py and creates the graphs for each metric
 
-activity_release_graph(repo_name, org_name, start_date, end_date, repo_api)
+activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
 
 sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
 

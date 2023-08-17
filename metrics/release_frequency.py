@@ -4,12 +4,15 @@
 """ Contains functions used to gather data and graph the Release Frequency metric
 """
 
-def get_release_data(repo_api):
-    """ Uses the GitHub REST API repository object to collect release data
+def get_release_data(repo_id, start_date, end_date, engine):
+    """ Get release data from the Augur database
 
     Parameters
     ----------
-    repo_api : GitHub repository object
+    repo_id : str
+    start_date : str
+    end_date : str
+    engine : sqlalchemy object
 
     Returns
     -------
@@ -17,25 +20,33 @@ def get_release_data(repo_api):
     """
     import pandas as pd
 
-    releases = repo_api.get_releases()
+    releases_df = pd.DataFrame()
 
-    releases_df = pd.DataFrame(
-        [x, x.tag_name, x.published_at, 1] for x in releases
-    )
-    releases_df.columns = ['release', 'name', 'date', 'releases']
+    release_query = f"""
+                    SELECT
+                        release_published_at as date
+                    FROM
+                        releases
+                    WHERE 
+                        repo_id = {repo_id}
+                        AND release_published_at > {start_date}
+                        AND release_published_at <= {end_date}
+                        """
+    releases_df = pd.read_sql_query(release_query, con=engine)
 
     return releases_df
 
-def activity_release_data(repo_name, org_name, start_date, end_date, repo_api):
-    """ Gathers release data from the GitHub API
+def activity_release_data(repo_id, repo_name, org_name, start_date, end_date, engine):
+    """ Takes release data and does some reformatting before graphing
 
     Parameters
     ----------
+    repo_id : str
     repo_name : str
     org_name : str
     start_date : str
     end_date : str
-    repo_api : GitHub repository object
+    engine : sqlalchemy object
 
     Returns
     -------
@@ -53,11 +64,11 @@ def activity_release_data(repo_name, org_name, start_date, end_date, repo_api):
     from utils.date_calcs import convert_dates
 
     try:
-        releases_df = get_release_data(repo_api)
+        releases_df = get_release_data(repo_id, start_date, end_date, engine)
         error_num = 0
         error_text = None
     except:
-        return -1, 'NO DATA', None, None, None, None, None, None, None, None
+        return -1, 'NO DATA', None, None, None, None, None, None
 
     start_dt, end_dt = convert_dates(start_date, end_date)
     six_mos_dt = end_dt - datetime.timedelta(days=180)
@@ -69,7 +80,7 @@ def activity_release_data(repo_name, org_name, start_date, end_date, repo_api):
 
     # return before creating plots if no release data in past 6 months
     if release_num == 0:
-        return -1, 'NO DATA', None, None, None, None, None, None, None, None
+        return -1, 'NO DATA', None, None, None, None, None, None
 
     title = org_name + "/" + repo_name + "\n" + str(release_num) + " releases in the past 6 months."
 
@@ -77,16 +88,17 @@ def activity_release_data(repo_name, org_name, start_date, end_date, repo_api):
 
     return error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num
 
-def activity_release_graph(repo_name, org_name, start_date, end_date, repo_api):
+def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine):
     """ Graphs the release data returned from the activity_release_data function
 
     Parameters
     ----------
+    repo_id : str
     repo_name : str
     org_name : str
     start_date : str
     end_date : str
-    repo_api : GitHub repository object
+    engine : sqlalchemy object
 
     Output
     ------
@@ -99,7 +111,7 @@ def activity_release_graph(repo_name, org_name, start_date, end_date, repo_api):
     import matplotlib.ticker as ticker
     from utils.file_operations import output_filename
 
-    error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num = activity_release_data(repo_name, org_name, start_date, end_date, repo_api)
+    error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num = activity_release_data(repo_id, repo_name, org_name, start_date, end_date, engine)
 
     if error_num == -1:
         return -1, 'NO DATA'
@@ -117,7 +129,7 @@ def activity_release_graph(repo_name, org_name, start_date, end_date, repo_api):
     ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
     ax.set(yticklabels=[])
 
-    plottermonth = sns.lineplot(y='releases', x='date', data=releases_df, marker="X", linewidth=0, markersize=20).set_title(title, fontsize=30)
+    plottermonth = sns.lineplot(y=1, x='date', data=releases_df, marker="X", linewidth=0, markersize=20).set_title(title, fontsize=30)
     xlabel_str = 'Year Month\n\n' + interpretation
     plottermonthlabels = ax.set_xlabel(xlabel_str)
 
