@@ -34,7 +34,7 @@ A text file containing one GitHub personal access token
 Usage
 ----- 
 
-health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS] -c AUGUR_CONFIG
+health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS] -c AUGUR_CONFIG -t API_KEY
 
 options:
   -h, --help            show this help message and exit
@@ -46,6 +46,8 @@ options:
                         The number of years of data to collect (default to 1)
   -c AUGUR_CONFIG, --configfile AUGUR_CONFIG
                         The full file path to an Augur config.json file (required)
+  -t API_KEY, --token API_KEY
+                        The file where your GitHub personal access token can be found (required)
 
 Output
 ------
@@ -59,7 +61,8 @@ import argparse
 from utils.augur_connect import augur_db_connect
 from utils.repo_info import get_repo_info
 from utils.date_calcs import get_dates
-from common_functions import fork_archive, repo_api_call
+from utils.repo_info import fork_archive
+from utils.github_api import repo_api_call
 from common_functions import sustain_prs_by_repo_graph, response_time_graph, contributor_risk_graph, activity_release_graph
 
 # Gather options from command line arguments and store them in variables
@@ -94,7 +97,7 @@ is_forked, is_archived = fork_archive(repo_name, org_name, engine)
 print('Forked:', str(is_forked), '\nArchived:', str(is_archived))
 
 # Get the GitHub API repository object used to gather release data.
-repo_api = repo_api_call(repo_name, org_name)
+repo_api = repo_api_call(repo_name, org_name, api_key)
 
 # This section compares the Augur org / repo and renames them for repos that have been redirected
 # using the GH API as the canonical source of data for the org and repo, rather than what's in Augur
