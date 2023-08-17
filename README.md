@@ -4,12 +4,8 @@ Uses an Augur database to generate metrics for the CHAOSS [Starter Project Healt
 ## health_by_repo.py
 
 Generates data about each of the 4 metrics in the model. See the docstring at the
-top of this file to learn about requirements (config file and GitHub API key) along
+top of this file to learn about the config file requirements along
 with the arguments that need to be passed in when you run it.
-
-Note: currently the release data is being pulled from the GitHub API, instead of
-Augur. Eventually, this should be pulled from Augur to reduce dependence on the
-GitHub API.
 
 ## metrics subdirectory
 
