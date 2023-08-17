@@ -57,7 +57,6 @@ from utils.augur_connect import augur_db_connect
 from utils.repo_info import get_repo_info
 from utils.date_calcs import get_dates
 from utils.repo_info import fork_archive
-from utils.github_api import repo_api_call
 from metrics.release_frequency import activity_release_graph
 from metrics.closure_ratio import sustain_prs_by_repo_graph
 from metrics.first_response import response_time_graph
