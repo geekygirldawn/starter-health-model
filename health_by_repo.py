@@ -14,7 +14,7 @@ be the most recent completed month.
 Requirements
 ------------
 
-Files required to run this script (should be in the same directory):
+Files required to run this script:
 config.json
     {
         "connection_string": "sqlite:///:memory:",
@@ -34,7 +34,7 @@ A text file containing one GitHub personal access token
 Usage
 ----- 
 
-health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS]
+health_by_repo.py [-h] -o ORG_NAME -r REPO_NAME [-y YEARS] -c AUGUR_CONFIG
 
 options:
   -h, --help            show this help message and exit
@@ -44,6 +44,8 @@ options:
                         The name of a GitHub repository in that org where your PRs can be found (required)
   -y YEARS, --years YEARS
                         The number of years of data to collect (default to 1)
+  -c AUGUR_CONFIG, --configfile AUGUR_CONFIG
+                        The full file path to an Augur config.json file (required)
 
 Output
 ------
