@@ -13,43 +13,6 @@ in '_data' while graphing functions have names ending in '_graph'
 
 """
 
-def augur_db_connect():
-    """ Connects to the Augur database using the configuration from 
-        config.json
-            {
-                "connection_string": "sqlite:///:memory:",
-                "database": "xxxxx",
-                "host": "xxxx.xxxx.xx",
-                "password": "xxxxx",
-                "port": xxxx,
-                "schema": "augur_data",
-                "user": "xxxx",
-                "user_type": "read_only"
-            }
-        Returns
-        -------
-        engine : sqlalchemy database object
-    """
-    import psycopg2
-    import sqlalchemy as s
-    import json
-    from os.path import dirname, join
-    current_dir = dirname(__file__)
-    file_path = join(current_dir, "./config.json")
-
-    with open(file_path) as config_file:
-        config = json.load(config_file)
-
-    database_connection_string = 'postgresql+psycopg2://{}:{}@{}:{}/{}'.format(config['user'], config['password'], config['host'], config['port'], config['database'])
-
-    dbschema='augur_data'
-    engine = s.create_engine(
-        database_connection_string,
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
-
-    return engine
-
-
 def get_repo_info(engine, repo_org, repo_name):
     """Retrieves the Augur repo_id (unique key) for a GitHub org/repo combination.
 

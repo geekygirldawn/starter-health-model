@@ -54,7 +54,8 @@ Output
 
 """
 import argparse
-from common_functions import augur_db_connect, get_repo_info, get_dates
+from utils.augur_connect import augur_db_connect
+from common_functions import get_repo_info, get_dates
 from common_functions import fork_archive, repo_api_call
 from common_functions import sustain_prs_by_repo_graph, response_time_graph, contributor_risk_graph, activity_release_graph
 
@@ -64,18 +65,20 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--org", required=True, dest = "org_name", help="The name of the GitHub organization where your repo is found (required)")
 parser.add_argument("-r", "--repo", required=True, dest = "repo_name", help="The name of a GitHub repository in that org where your PRs can be found (required)")
 parser.add_argument("-y", "--years", required=False, dest = "years", type=int, default=1, help="The number of years of data to collect (default to 1)")
+parser.add_argument("-c", "--configfile", required=True, dest = "augur_config", help="The full file path to an Augur config.json file (required)")
 
 args = parser.parse_args()
 org_name = args.org_name
 repo_name = args.repo_name
 years = args.years
+augur_config = args.augur_config
 
 # Get the dates for the analysis using the years argument if provided
 days = 365 * years
 start_date, end_date = get_dates(days)
 
 # Create the connection to the Augur database and get the Augur repo_id
-engine = augur_db_connect()
+engine = augur_db_connect(augur_config)
 repo_id = get_repo_info(engine, org_name, repo_name)
 
 # Check to see if the repo is Forked or Archived, since those impact 
