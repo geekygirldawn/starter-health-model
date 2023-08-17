@@ -57,7 +57,8 @@ Output
 """
 import argparse
 from utils.augur_connect import augur_db_connect
-from common_functions import get_repo_info, get_dates
+from utils.repo_info import get_repo_info
+from common_functions import get_dates
 from common_functions import fork_archive, repo_api_call
 from common_functions import sustain_prs_by_repo_graph, response_time_graph, contributor_risk_graph, activity_release_graph
 
