@@ -1,5 +1,5 @@
-# Copyright 2023 CHAOSS Project
-# Author: Dawn M. Foster <dawn@dawnfoster.com>
+# Copyright Dawn M. Foster <dawn@dawnfoster.com>
+# MIT License
 
 """ Started Project Health Metrics Model data for a single repository
 This script uses data stored in an Augur PostgresQL database to gather

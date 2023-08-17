@@ -1,3 +1,6 @@
+# Copyright Dawn M. Foster <dawn@dawnfoster.com>
+# MIT License
+
 def augur_db_connect(file_path):
     """ Connects to the Augur database using the configuration from 
         config.json

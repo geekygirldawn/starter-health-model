@@ -1,3 +1,6 @@
+# Copyright Dawn M. Foster <dawn@dawnfoster.com>
+# MIT License
+
 def get_repo_info(engine, repo_org, repo_name):
     """Retrieves the Augur repo_id (unique key) for a GitHub org/repo combination.
 
