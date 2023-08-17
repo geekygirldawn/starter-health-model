@@ -1,7 +1,7 @@
 # Copyright Dawn M. Foster <dawn@dawnfoster.com>
 # MIT License
 
-""" Started Project Health Metrics Model data for a single repository
+""" Starter Project Health Metrics Model data for a single repository
 This script uses data stored in an Augur PostgresQL database to gather
 data for the metrics found in the Started Project Health Metrics Model:
 https://chaoss.community/kb/metrics-model-starter-project-health/
@@ -28,7 +28,7 @@ config.json
     }
 Replace the 'x's with values to connect to your Augur database
 
-gh_key
+api_key
 A text file containing one GitHub personal access token
 
 Usage
