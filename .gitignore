@@ -1,6 +1,7 @@
 # Project files with confidential data (keys, pwds)
 config.json
 gh_key
+api_key
 
 # Output files
 output/
