@@ -48,15 +48,7 @@ def commit_author_data(repo_id, start_date, end_date, engine):
                         AND cmt_author_name NOT LIKE 'gerrit%%'
                         AND cmt_author_name NOT LIKE '%%utomation%%'
                         AND cmt_author_name NOT LIKE '%%ipeline%%'
-                        AND cmt_author_name NOT LIKE '%%Cloud Foundry%%'
-                        AND cmt_author_name != 'cfcr'
-                        AND cmt_author_name != 'CFCR'
                         AND cmt_author_name != 'Travis CI'
-                        AND cmt_author_name != 'Bitnami Containers'
-                        AND cmt_author_name != 'Cloud Foundry London'
-                        AND cmt_author_name != 'Spring Operator'
-                        AND cmt_author_name != 'Spring Buildmaster'
-                        AND cmt_author_name != 'pivotal-rabbitmq-ci'
                     ORDER BY
                         cntrb_canonical;
                     """
