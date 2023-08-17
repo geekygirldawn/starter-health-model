@@ -1,7 +1,7 @@
 # Starter Project Health Metrics Model Data
 Uses an Augur database to generate metrics for the CHAOSS [Starter Project Health Metrics Model](https://chaoss.community/kb/metrics-model-starter-project-health/)
 
-**health_by_repo.py**
+## health_by_repo.py
 
 Generates data about each of the 4 metrics in the model. See the docstring at the
 top of this file to learn about requirements (config file and GitHub API key) along
@@ -11,7 +11,7 @@ Note: currently the release data is being pulled from the GitHub API, instead of
 Augur. Eventually, this should be pulled from Augur to reduce dependence on the
 GitHub API.
 
-**metrics subdirectory**
+## metrics subdirectory
 
 The metrics subdirectory contains all of the functions that do the real work to generate
 the data and create a graph for each of the metrics in the model.
