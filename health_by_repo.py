@@ -6,8 +6,6 @@ This script uses data stored in an Augur PostgresQL database to gather
 data for the metrics found in the Started Project Health Metrics Model:
 https://chaoss.community/kb/metrics-model-starter-project-health/
 
-Release data is gathered via the GitHub API.
-
 Partial month data will never be reported. The last data reported will
 be the most recent completed month.
 
