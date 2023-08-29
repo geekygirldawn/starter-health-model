@@ -109,9 +109,9 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
     # Don't gather data if less than 24 PRs
     # Or if non_null count is 0
     if len(pr_all) < 24:
-        return -1, 'TOO FEW PRs', None, None, None, None, None, None
+        return -1, 'TOO FEW PRs', None, None, None, None
     elif pr_all['first_response_time'].count() == 0:
-        return -1, 'PR COMMENTS MISSING', None, None, None, None, None, None
+        return -1, 'PR COMMENTS MISSING', None, None, None, None
     else:
         error_num = 0
         error_text = None
@@ -222,7 +222,8 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
 
     # Don't gather data if less than 24 PRs
     if error_num == -1:
-        return -1, error_text
+        print("First Response: Too few PRs to calculate")
+        return
 
     sns.set_style('ticks')
     sns.set(style="whitegrid", font_scale=2)

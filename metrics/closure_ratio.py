@@ -213,7 +213,7 @@ def sustain_prs_by_repo_data(repo_id, repo_name, org_name, start_date, end_date,
 
     # Return with no data if there are no PRs
     if all_prsDF['total_prs_open_closed'].sum() < 24:
-        return -1, 'TOO FEW PRs', None, None, None, None, None, None
+        return -1, 'TOO FEW PRs', None, None, None, None
     else:
         error_num = 0
         error_text = None
@@ -297,7 +297,8 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
     error_num, error_text, pr_sustainDF, title, interpretation, month_num = sustain_prs_by_repo_data(repo_id, repo_name, org_name, start_date, end_date, engine)
 
     if error_num == -1:
-        return -1, 'TOO FEW PRs'
+        print("Closure Ratio: Too few PRs to calculate")
+        return
 
     matplotlib.use('Agg') #prevents from tying to send plot to screen
     sns.set_style('ticks')
