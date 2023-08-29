@@ -241,7 +241,7 @@ def sustain_prs_by_repo_data(repo_id, repo_name, org_name, start_date, end_date,
             month_num+=1
         m+=1
 
-    title = org_name + "/" + pr_sustainDF['repo_name'][0] + "\nSustains and Keeps up with Contributions"
+    title = org_name + "/" + pr_sustainDF['repo_name'][0] + "\nClosure Ratio - Sustains and Keeps up with Contributions"
 
     recent_mo_diff = pr_sustainDF['diff'][9] + pr_sustainDF['diff'][10] + pr_sustainDF['diff'][11]
     prev_mo_diff = pr_sustainDF['diff'][6] + pr_sustainDF['diff'][7] + pr_sustainDF['diff'][8]

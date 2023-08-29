@@ -82,7 +82,7 @@ def activity_release_data(repo_id, repo_name, org_name, start_date, end_date, en
     if release_num == 0:
         return -1, 'NO DATA', None, None, None, None, None, None
 
-    title = org_name + "/" + repo_name + "\n" + str(release_num) + " releases in the past 6 months."
+    title = org_name + "/" + repo_name + "\nRelease Frequency: " + str(release_num) + " releases in the past 6 months."
 
     interpretation = 'Interpretation: Healthy projects will have frequent releases with security updates, bug fixes, and features.'
 

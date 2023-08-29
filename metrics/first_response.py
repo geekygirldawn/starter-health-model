@@ -166,7 +166,7 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
         if (percent > 0.15 and year_month >= six_months):
             month_num+=1
 
-    title = org_name + "/" + repo_name + "\nTimely Responses"
+    title = org_name + "/" + repo_name + "\nTime to First Response"
 
     recent_mo = first_response['out_guidelines'][9] + first_response['out_guidelines'][10] + first_response['out_guidelines'][11]
     prev_mo = first_response['out_guidelines'][6] + first_response['out_guidelines'][7] + first_response['out_guidelines'][8]
