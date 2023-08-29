@@ -135,7 +135,7 @@ def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, e
 
     filename = output_filename(repo_name, org_name, 'activity_release')
 
-    fig.savefig(filename, bbox_inches='tight')
+    fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
     print('\nActivity Release metric for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)

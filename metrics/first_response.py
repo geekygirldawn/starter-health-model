@@ -243,7 +243,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
 
     filename = output_filename(repo_name, org_name, 'first_response_pr')
 
-    fig.savefig(filename, bbox_inches='tight')
+    fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
     print('\nTime to first response for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)

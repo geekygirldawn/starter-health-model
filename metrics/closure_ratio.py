@@ -319,7 +319,7 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
 
     filename = output_filename(repo_name, org_name, 'sustains_pr')
 
-    fig.savefig(filename, bbox_inches='tight')
+    fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
     print('\nSustaining and keeping up with contributions for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
