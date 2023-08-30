@@ -318,7 +318,7 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
     xlabel_str = 'Year Month\n\n' + interpretation
     plottermonthlabels = ax.set_xlabel(xlabel_str)
 
-    filename = output_filename(repo_name, org_name, 'sustains_pr')
+    filename = output_filename(repo_name, org_name, 'change_request_closure_ratio_pr')
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)

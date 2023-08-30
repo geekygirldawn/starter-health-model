@@ -242,7 +242,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     interpretation_str = 'Year Month\n\n' + interpretation
     plottermonthlabels = ax.set_xlabel(interpretation_str)
 
-    filename = output_filename(repo_name, org_name, 'first_response_pr')
+    filename = output_filename(repo_name, org_name, 'time_to_first_response_pr')
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)

@@ -209,7 +209,7 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
             textcoords='offset points')
         i+=1
 
-    filename = output_filename(repo_name, org_name, 'contrib_risk_commits')
+    filename = output_filename(repo_name, org_name, 'bus_factor')
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
