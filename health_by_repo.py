@@ -92,11 +92,15 @@ start_date, end_date = get_dates(days)
 engine = augur_db_connect(augur_config)
 
 if repo_name == None:
+    # This is the case where data is gathered on all repos from an org
     repoDF = get_org_repos(org_name, engine)
     print("multiple repos")
 else:
+    # This is the case where data is gathered on a single org / repo combo
     repo_id = get_repo_info(engine, org_name, repo_name)
     repoDF = pd.DataFrame([[repo_id, repo_name]], columns=['repo_id', 'repo_name'])
+
+# Collect data for every repo in repoDF
 
 for repo in repoDF.iterrows():
     repo_id = repo[1]['repo_id']
