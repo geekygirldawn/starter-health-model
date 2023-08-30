@@ -91,6 +91,18 @@ def fork_archive(repo_name_orig, org_name, engine):
     return is_forked, is_archived
 
 def get_org_repos(org_name, engine):
+    """Retrieves the Augur repo_id (unique key) and repo_name for all repos in
+       a GitHub org and stores them in a dataframe to return.
+
+    Parameters
+    ----------
+    engine : sqlalchemy database object
+    org_name : str
+
+    Returns
+    -------
+    repoDF : dataframe
+    """
     import pandas as pd
 
     repo_info_query = f"""
