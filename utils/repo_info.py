@@ -89,3 +89,19 @@ def fork_archive(repo_name_orig, org_name, engine):
        is_archived = False
 
     return is_forked, is_archived
+
+def get_org_repos(org_name, engine):
+    import pandas as pd
+
+    repo_info_query = f"""
+        SELECT
+        repo.repo_id, repo.repo_name
+        FROM
+        repo, repo_groups
+        WHERE
+            repo_groups.repo_group_id = repo.repo_group_id AND
+            rg_name = '{org_name}';
+            """
+    repoDF = pd.read_sql_query(repo_info_query, con=engine)
+
+    return repoDF
