@@ -140,7 +140,7 @@ def contributor_risk_data(repo_id, repo_name, org_name, start_date, end_date, en
 
     # Exit early if num_people is 0
     if num_people == 0:
-        return -1, 'NO DATA', None, None, None, None, None, None, None, None, None
+        return -1, 'NO DATA', None, None, None, None, None, None
     else:
         error_num = 0
         error_text = 'NA'
