@@ -38,9 +38,8 @@ Replace the 'x's with values to connect to your Augur database
 Usage
 ----- 
 
-usage: health_by_repo.py [-h] -o ORG_NAME [-r REPO_NAME] [-y YEARS] -c AUGUR_CONFIG
+usage: health_by_repo.py [-h] -o ORG_NAME [-r REPO_NAME] [-y YEARS] [-b BUS_DAYS] -c AUGUR_CONFIG
 
-options:
   -h, --help            show this help message and exit
   -o ORG_NAME, --org ORG_NAME
                         The name of the GitHub organization for data collection on your repo(s) (required)
@@ -49,6 +48,8 @@ options:
                         collected for all repos from the given org.
   -y YEARS, --years YEARS
                         The number of years of data to collect (default to 1)
+  -b BUS_DAYS, --businessdays BUS_DAYS
+                        The number of business days to use in the time to first response calculation (default to 2)
   -c AUGUR_CONFIG, --configfile AUGUR_CONFIG
                         The full file path to an Augur config.json file (required)
 
@@ -76,12 +77,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--org", required=True, dest = "org_name", help="The name of the GitHub organization for data collection on your repo(s) (required)")
 parser.add_argument("-r", "--repo", required=False, dest = "repo_name", default=None, help="The name of a GitHub repository in that org where your PRs can be found. If no repo is specified, data will be collected for all repos from the given org.")
 parser.add_argument("-y", "--years", required=False, dest = "years", type=int, default=1, help="The number of years of data to collect (default to 1)")
+parser.add_argument("-b", "--businessdays", required=False, dest = "bus_days", type=int, default=2, help="The number of business days to use in the time to first response calculation (default to 2)")
 parser.add_argument("-c", "--configfile", required=True, dest = "augur_config", help="The full file path to an Augur config.json file (required)")
 
 args = parser.parse_args()
 org_name = args.org_name
 repo_name = args.repo_name
 years = args.years
+bus_days = args.bus_days
 augur_config = args.augur_config
 
 # Get the dates for the analysis using the years argument if provided
@@ -122,5 +125,5 @@ for repo in repoDF.iterrows():
 
     contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
 
-    response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
+    response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days)
 
