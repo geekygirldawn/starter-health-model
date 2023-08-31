@@ -74,7 +74,7 @@ def response_time_db(repo_id, repo_name, start_date, end_date, engine):
 
     return pr_all
 
-def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engine):
+def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days):
     """ Process the data from the queries in the response_time_db function to calculate
     which ones are in / out of guidelines for the number of business days specified
 
@@ -104,7 +104,7 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
 
     pr_all = response_time_db(repo_id, repo_name, start_date, end_date, engine)
 
-    bd = pd.tseries.offsets.BusinessDay(n = 2)
+    bd = pd.tseries.offsets.BusinessDay(n = bus_days)
 
     # Don't gather data if less than 24 PRs
     # Or if non_null count is 0
@@ -120,9 +120,9 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
     try:
 #        pr_all['diff'] = pr_all.first_response_time.subtract(pr_all.pr_created_at, fill_value=0)
         pr_all['diff'] = pr_all.first_response_time - pr_all.pr_created_at
-        pr_all['2_bus_days'] = pr_all.pr_created_at + bd
+        pr_all['bus_days'] = pr_all.pr_created_at + bd
         pr_all['yearmonth'] = pr_all['pr_created_at'].dt.strftime('%Y-%m')
-        pr_all['in_guidelines'] = np.where(pr_all['2_bus_days'] < pr_all['first_response_time'], 0, 1)
+        pr_all['in_guidelines'] = np.where(pr_all['bus_days'] < pr_all['first_response_time'], 0, 1)
         error_num = 0
         error_text = 'NA'
 
@@ -191,7 +191,7 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
     
     return error_num, error_text, first_response, title, interpretation, month_num
 
-def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine):
+def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days):
     """ Graphs the data from the response_time_data function
 
     Parameters
@@ -218,7 +218,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     
     warnings.simplefilter("ignore") # Ignore fixed formatter warning.
 
-    error_num, error_text, first_response, title, interpretation, month_num = response_time_data(repo_id, repo_name, org_name, start_date, end_date, engine)
+    error_num, error_text, first_response, title, interpretation, month_num = response_time_data(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days)
 
     # Don't gather data if less than 24 PRs
     if error_num == -1:
@@ -234,8 +234,10 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     # the size of A4 paper
     fig.set_size_inches(24, 8)
 
+    y_guidelines_label = 'Response < ' + str(bus_days) +  ' bus days'
+
     plottermonth = sns.lineplot(x='yearmonth', y='total_prs', data=first_response, sort=False, color='black', label='Total', linewidth=2.5)
-    plottermonth = sns.lineplot(x='yearmonth', y='in_guidelines', data=first_response, sort=False, color='green', label='Response < 2 bus days', linewidth=2.5, linestyle='dashed').set_title(title, fontsize=30) 
+    plottermonth = sns.lineplot(x='yearmonth', y='in_guidelines', data=first_response, sort=False, color='green', label=y_guidelines_label, linewidth=2.5, linestyle='dashed').set_title(title, fontsize=30) 
 
     plottermonthlabels = ax.set_xticklabels(first_response['yearmonth'],rotation=45)
     plottermonthlabels = ax.set_ylabel('Number of PRs')
@@ -248,7 +250,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     plt.close(fig)
 
     print('\nTime to first response for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
-    print(month_num, 'months with more than 10% of pull requests not responded to within 2 business days in the past 6 months\n')
+    print(month_num, 'months with more than 10% of pull requests not responded to within specified business days in the past 6 months\n')
 
 
 
