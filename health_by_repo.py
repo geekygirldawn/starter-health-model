@@ -117,7 +117,7 @@ for repo in repoDF.iterrows():
     # In general, this model isn't intended to be used with forked
     # or archived repos.
     is_forked, is_archived = fork_archive(repo_name, org_name, engine)
-    print('\n', org_name, repo_name, '- Forked:', str(is_forked), 'Archived:', str(is_archived))
+    print(org_name, repo_name, '- Forked:', str(is_forked), 'Archived:', str(is_archived))
 
     # This section collects all of the data using the functions for each graph
     # found in common_functions.py and creates the graphs for each metric
@@ -130,3 +130,5 @@ for repo in repoDF.iterrows():
 
     response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days, years)
 
+    # Print a separator between repos
+    print('-------------')
