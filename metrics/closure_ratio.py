@@ -266,7 +266,7 @@ def sustain_prs_by_repo_data(repo_id, repo_name, org_name, start_date, end_date,
 
     return error_num, error_text, pr_sustainDF, title, interpretation, month_num  
 
-def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine):
+def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years):
     """ Graph the data returned by the sustain_prs_by_repo_data function
 
     Parameters
@@ -318,7 +318,8 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
     xlabel_str = 'Year Month\n\n' + interpretation
     plottermonthlabels = ax.set_xlabel(xlabel_str)
 
-    filename = output_filename(repo_name, org_name, 'change_request_closure_ratio_pr')
+    filename_str = 'change_request_closure_ratio_pr_y' + str(years) 
+    filename = output_filename(repo_name, org_name, filename_str)
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)

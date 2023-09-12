@@ -159,7 +159,7 @@ def contributor_risk_data(repo_id, repo_name, org_name, start_date, end_date, en
 
     return error_num, error_text, names, percents, commits, title, interpretation, num_people
 
-def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine):
+def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years):
     """ Graphs data from the contributor_risk_data function
 
     Parameters
@@ -209,7 +209,8 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
             textcoords='offset points')
         i+=1
 
-    filename = output_filename(repo_name, org_name, 'bus_factor')
+    filename_str = 'bus_factor_y' + str(years)
+    filename = output_filename(repo_name, org_name, filename_str)
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)

@@ -88,7 +88,7 @@ def activity_release_data(repo_id, repo_name, org_name, start_date, end_date, en
 
     return error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num
 
-def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine):
+def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years):
     """ Graphs the release data returned from the activity_release_data function
 
     Parameters
@@ -133,7 +133,8 @@ def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, e
     xlabel_str = 'Year Month\n\n' + interpretation
     plottermonthlabels = ax.set_xlabel(xlabel_str)
 
-    filename = output_filename(repo_name, org_name, 'release_frequency')
+    filename_str = 'release_frequency_y' + str(years)
+    filename = output_filename(repo_name, org_name, filename_str)
 
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
