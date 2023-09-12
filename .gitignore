@@ -6,6 +6,9 @@ api_key
 # Output files
 output/
 
+# Scratch files
+scratch*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
