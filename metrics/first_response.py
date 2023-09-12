@@ -249,8 +249,8 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
-    print('\nTime to first response for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
-    print(month_num, 'months with more than 10% of pull requests not responded to within specified business days in the past 6 months\n')
+    print('Time to first response for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
+    print(month_num, 'months with more than 10% of pull requests not responded to within specified business days in the past 6 months')
 
 
 

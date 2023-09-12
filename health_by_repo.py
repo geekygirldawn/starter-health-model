@@ -87,6 +87,9 @@ years = args.years
 bus_days = args.bus_days
 augur_config = args.augur_config
 
+# Print parameters to the screen
+print('Parameters: Years =', years, 'Business Days', bus_days)
+
 # Get the dates for the analysis using the years argument if provided
 days = 365 * years
 start_date, end_date = get_dates(days)
@@ -114,7 +117,7 @@ for repo in repoDF.iterrows():
     # In general, this model isn't intended to be used with forked
     # or archived repos.
     is_forked, is_archived = fork_archive(repo_name, org_name, engine)
-    print('Forked:', str(is_forked), '\nArchived:', str(is_archived))
+    print('\n', org_name, repo_name, '- Forked:', str(is_forked), 'Archived:', str(is_archived))
 
     # This section collects all of the data using the functions for each graph
     # found in common_functions.py and creates the graphs for each metric

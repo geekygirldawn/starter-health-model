@@ -214,5 +214,5 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
-    print('\nBus Factor / Contributor Risk for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
-    print(num_people, 'people make up > 70% of the commits in the past year\n')
+    print('Bus Factor / Contributor Risk for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
+    print(num_people, 'people make up > 70% of the commits in the past year.')

@@ -323,5 +323,5 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
-    print('\nSustaining and keeping up with contributions for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
-    print('Number of months in the past 6 months with > 15% of PRs not closed', month_num, '\n')
+    print('Change Request Closure Ratio (keeping up with contributions) for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
+    print('Number of months in the past 6 months with > 15% of PRs not closed:', month_num)

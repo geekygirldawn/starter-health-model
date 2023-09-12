@@ -138,5 +138,5 @@ def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, e
     fig.savefig(filename, bbox_inches='tight', dpi=500)
     plt.close(fig)
 
-    print('\nActivity Release metric for', org_name, '/', repo_name, '\nfrom', start_date, 'to', end_date, '\nsaved as', filename)
-    print(release_num, 'releases in the past 6 months\n')
+    print('Release Frequency for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
+    print(release_num, 'releases in the past 6 months')
