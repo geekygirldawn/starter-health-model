@@ -122,11 +122,11 @@ for repo in repoDF.iterrows():
     # This section collects all of the data using the functions for each graph
     # found in common_functions.py and creates the graphs for each metric
 
-    activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
+    activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
+    sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine)
+    contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days)
+    response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days, years)
 
