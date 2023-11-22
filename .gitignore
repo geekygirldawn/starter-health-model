@@ -2,6 +2,7 @@
 config.json
 gh_key
 api_key
+*.json
 
 # Output files
 output/
