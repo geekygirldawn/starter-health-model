@@ -18,58 +18,45 @@ def commit_author_data(repo_id, start_date, end_date, engine):
     authorDF : dataframe
     """
     import pandas as pd
-    from utils.date_calcs import convert_to_dt
+    #from utils.date_calcs import convert_to_dt
 
-    start_date, end_date = convert_to_dt(start_date, end_date)
+    #start_date, end_date = convert_to_dt(start_date, end_date)
 
     #Commit data - from humans excluding known bots
     commitsDF = pd.DataFrame()
     commitsquery = f"""
                     SELECT
-                        DISTINCT(cmt_commit_hash),
-                        contributors.cntrb_canonical,
-                        canonical_full_names.cntrb_full_name AS canonical_full_name,
-                        cmt_author_name, cmt_author_email, repo_id, cmt_author_timestamp 
-                    FROM commits 
-                        LEFT OUTER JOIN contributors ON cntrb_email = cmt_author_email left outer join 
-                        (
-                            SELECT distinct on (cntrb_canonical) cntrb_full_name, cntrb_canonical, data_collection_date
-                            FROM contributors
-                            WHERE cntrb_canonical = cntrb_email
-                            order by cntrb_canonical
-                        ) canonical_full_names on canonical_full_names.cntrb_canonical = contributors.cntrb_canonical
+                        DISTINCT(commits.cmt_commit_hash), commits.cmt_author_timestamp, contributors.cntrb_login
+                    FROM
+                        commits, contributors
                     WHERE 
-                        repo_id = {repo_id}
-                        AND cmt_author_name NOT LIKE 'snyk%%'
-                        AND cmt_author_name NOT LIKE '%%bot'
-                        AND cmt_author_name NOT LIKE '%%Bot'
-                        AND cmt_author_name NOT LIKE '%%BOT'
-                        AND cmt_author_name NOT LIKE 'dependabot%%'
-                        AND cmt_author_name NOT LIKE 'gerrit%%'
-                        AND cmt_author_name NOT LIKE '%%utomation%%'
-                        AND cmt_author_name NOT LIKE '%%ipeline%%'
-                        AND cmt_author_name != 'Travis CI'
+                        commits.repo_id = {repo_id}
+                        AND commits.cmt_ght_author_id = contributors.cntrb_id
+                        AND commits.cmt_author_name NOT LIKE 'snyk%%'
+                        AND commits.cmt_author_name NOT LIKE '%%bot'
+                        AND commits.cmt_author_name NOT LIKE '%%Bot'
+                        AND commits.cmt_author_name NOT LIKE '%%BOT'
+                        AND commits.cmt_author_name NOT LIKE 'dependabot%%'
+                        AND commits.cmt_author_name NOT LIKE 'gerrit%%'
+                        AND commits.cmt_author_name NOT LIKE '%%utomation%%'
+                        AND commits.cmt_author_name NOT LIKE '%%ipeline%%'
+                        AND commits.cmt_author_name != 'Travis CI'
+                        AND commits.cmt_author_timestamp >= {start_date}
+                        AND commits.cmt_author_timestamp <= {end_date}
                     ORDER BY
-                        cntrb_canonical;
+                        contributors.cntrb_login;
                     """
     
-    all_commitsDF = pd.read_sql_query(commitsquery, con=engine)
-    commitsDF = all_commitsDF[(all_commitsDF['cmt_author_timestamp'] >= start_date) & (all_commitsDF['cmt_author_timestamp'] <= end_date)]
+    commitsDF = pd.read_sql_query(commitsquery, con=engine)
     total_commits = commitsDF.cmt_commit_hash.nunique()    
-
-    dedupDF = commitsDF.drop_duplicates(subset=['cmt_commit_hash'], inplace = False, keep="first")
 
     authorDF = pd.DataFrame()
 
     # Count values by email as a starting point to get number of commits.
-    authorDF = dedupDF.cmt_author_email.value_counts()
+    authorDF = commitsDF.cntrb_login.value_counts()
     authorDF = authorDF.reset_index()
     authorDF.columns = ['name', 'commits']
-    for email in authorDF['name']:
-        name = dedupDF.loc[dedupDF['cmt_author_email'] == email]['cmt_author_name'].iloc[0]
-        authorDF.loc[(authorDF.name == email),'name'] = name
-    # Then group by name for people using the same name, but multiple email addresses
-    # as the final aggregation before calculating percent
+
     authorDF = authorDF.groupby('name').sum().reset_index().sort_values('commits', ascending=False)
     authorDF['percent'] = authorDF['commits'] / total_commits     
 
