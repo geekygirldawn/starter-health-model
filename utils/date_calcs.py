@@ -45,35 +45,8 @@ def get_dates(days):
 
     return start_date, end_date
 
-def convert_to_dt(start_date, end_date):
-    """ Converts start and end dates to datetime objects
-
-    Parameters
-    ----------
-    start_date : str
-    end_date : str
-
-    Returns
-    -------
-    start_dt : datetime
-    end_dt : datetime
-    
-    """
-    from datetime import datetime, timezone
-
-    # inputs will be date strings, output tz aware datetime
-
-    end_dt = datetime.strptime(end_date, "'%Y-%m-%d'").replace(tzinfo=timezone.utc)
-
-    start_dt = datetime.strptime(start_date, "'%Y-%m-%d'").replace(tzinfo=timezone.utc)
-
-    return start_dt, end_dt
-
 def convert_dates(start_date, end_date):
     """ Converts start and end dates to datetime objects.
-
-    This is different from the other function that does this, but
-    I don't remember why :)
 
     Parameters
     ----------
