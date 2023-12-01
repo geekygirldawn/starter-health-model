@@ -171,7 +171,7 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
     error_num, error_text, names, percents, commits, title, interpretation, num_people = contributor_risk_data(repo_id, repo_name, org_name, start_date, end_date, engine)
 
     if error_num == -1:
-        return
+        return "Error","Error"
 
     matplotlib.use('Agg') #prevents from tying to send plot to screen
     sns.set_style('ticks')
@@ -204,3 +204,6 @@ def contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, e
 
     print('Bus Factor / Contributor Risk for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
     print(num_people, 'people make up > 70% of the commits in the past year.')
+
+    percent_str = '--'.join(str(x) for x in percents)
+    return str(num_people), percent_str

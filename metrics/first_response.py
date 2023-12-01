@@ -223,7 +223,7 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     # Don't gather data if less than 24 PRs
     if error_num == -1:
         print("First Response: Too few PRs to calculate")
-        return
+        return "Too Few PRs"
 
     sns.set_style('ticks')
     sns.set(style="whitegrid", font_scale=2)
@@ -253,5 +253,5 @@ def response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engi
     print('Time to first response for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
     print(month_num, 'months with more than 10% of pull requests not responded to within specified business days in the past 6 months')
 
-
+    return str(month_num)
 

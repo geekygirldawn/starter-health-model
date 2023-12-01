@@ -298,7 +298,7 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
 
     if error_num == -1:
         print("Closure Ratio: Too few PRs to calculate")
-        return
+        return "Too Few PRs"
 
     matplotlib.use('Agg') #prevents from tying to send plot to screen
     sns.set_style('ticks')
@@ -326,3 +326,5 @@ def sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date
 
     print('Change Request Closure Ratio (keeping up with contributions) for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
     print('Number of months in the past 6 months with > 15% of PRs not closed:', month_num)
+
+    return str(month_num)
