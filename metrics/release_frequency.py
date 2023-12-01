@@ -114,7 +114,7 @@ def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, e
     error_num, error_text, releases_df, start_dt, end_dt, title, interpretation, release_num = activity_release_data(repo_id, repo_name, org_name, start_date, end_date, engine)
 
     if error_num == -1:
-        return
+        return "0"
 
     matplotlib.use('Agg') #prevents from tying to send plot to screen
     sns.set(style="whitegrid", font_scale=2)
@@ -141,3 +141,5 @@ def activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, e
 
     print('Release Frequency for', org_name, '/', repo_name, 'from', start_date, 'to', end_date, '\nsaved as', filename)
     print(release_num, 'releases in the past 6 months')
+
+    return str(release_num)

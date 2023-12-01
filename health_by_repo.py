@@ -62,10 +62,12 @@ Output
 
 """
 import argparse
+import sys
 import pandas as pd
 from utils.augur_connect import augur_db_connect
 from utils.date_calcs import get_dates
 from utils.repo_info import get_repo_info, fork_archive, get_org_repos
+from utils.file_operations import create_path_str
 from metrics.release_frequency import activity_release_graph
 from metrics.closure_ratio import sustain_prs_by_repo_graph
 from metrics.first_response import response_time_graph
@@ -101,6 +103,18 @@ if repo_name == None:
     # This is the case where data is gathered on all repos from an org
     repoDF = get_org_repos(org_name, engine)
     print("multiple repos")
+
+    # When gathering data on an org, it can be helpful to have a summary CSV
+    path = create_path_str(org_name)
+    output_filename = path + '/_' + org_name + '_output_yr_' + str(years) + '_bdays_' + str(bus_days) + '.csv'
+
+    try:
+        csv_output = open(output_filename, 'w')
+        csv_output.write('org_name,repo_name,releases,first_resp_mos,closure_ratio_mos,bus_factor,bus_factor_percents,fork,archive\n')
+    except:
+        print('Could not write to csv file. Exiting')
+        sys.exit(1)
+
 else:
     # This is the case where data is gathered on a single org / repo combo
     repo_id = get_repo_info(engine, org_name, repo_name)
@@ -121,14 +135,20 @@ for repo in repoDF.iterrows():
 
     # This section collects all of the data using the functions for each graph
     # found in common_functions.py and creates the graphs for each metric
+    # Skips archived repos
 
-    activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
+    if is_archived == False:
+        releases = activity_release_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
+        closure_ratio_mos = sustain_prs_by_repo_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
+        bus_factor, bus_factor_percents = contributor_risk_graph(repo_id, repo_name, org_name, start_date, end_date, engine, years)
 
-    response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days, years)
+        first_resp_mos = response_time_graph(repo_id, repo_name, org_name, start_date, end_date, engine, bus_days, years)
 
+        if len(repoDF) > 1:
+            csv_line = org_name + ',' + repo_name + ',' + releases + ',' + first_resp_mos + ',' + closure_ratio_mos + ',' + bus_factor + ',' + bus_factor_percents + ',' + str(is_forked) + ',' + str(is_archived) + '\n'
+            csv_output.write(csv_line)
+    
     # Print a separator between repos
     print('-------------')
