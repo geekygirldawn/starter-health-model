@@ -156,7 +156,7 @@ def response_time_data(repo_id, repo_name, org_name, start_date, end_date, engin
 
             start_mo += relativedelta(months=1)
 
-        first_response = first_response.sort_values('yearmonth')
+        first_response = first_response.sort_values('yearmonth').reset_index(drop=True)
 
     month_num = 0
     six_months = str(datetime.date.today() + relativedelta(months=-7)) # 7 because we don't gather current partial month data
